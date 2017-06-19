@@ -1,0 +1,93 @@
+main {
+    font-family: sans-serif;
+}
+
+header {
+    color: darkorange;
+    font-weight: bold;
+}
+
+#welcome {
+    text-align: center;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#welcome a {
+    color: white;
+    text-decoration: none;
+}
+
+#welcome a:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#welcome input {
+    background-color: black;
+    color: white;
+    border: 1px solid grey;
+    padding: 5px;
+    width: 100%;
+}
+
+#welcome input:focus {
+    background-color: white;
+    color: black;
+}
+
+#welcome input[type="submit"] {
+    background-color: darkorange;
+    color: white;
+    margin: 5px;
+    padding: 5px;
+}
+
+#welcome input[type="submit"]:hover {
+    cursor: pointer;
+    background-color: rgb(245, 92, 6);
+}
+
+#welcome-child {
+    display: inline-block;
+    background-color: black;
+    color: white;
+    padding: 50px;
+    opacity: 0.8;
+    filter: alpha(opacity=80);  /* For IE8 and earlier */
+}
+
+#welcome-child h2 {
+    margin: 0px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+}
+
+header ul {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+header ul li {
+    display: inline;
+}
+
+#activity-input {
+    transform: translateX(-2000px);
+    height: 1px;
+    width: 1px;
+}
+
+label[for="activity-input"] {
+    cursor: pointer;
+}
+
+.error {
+    color: red;
+}

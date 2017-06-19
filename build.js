@@ -5,14 +5,14 @@ const plugins = [
         "process.env": {
             NODE_ENV: JSON.stringify("production")
         }
-   })
+    })
 ];
 
 if (process.env.NODE_ENV == 'production') {
     plugins.push(new webpack.optimize.UglifyJsPlugin({
-       compress: {
-           warnings: false
-       }
+        compress: {
+            warnings: false
+        }
     }));
 }
 
