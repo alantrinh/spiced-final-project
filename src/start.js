@@ -5,12 +5,14 @@ import Welcome from './WelcomeComponents/Welcome';
 import Login from './WelcomeComponents/Login';
 import Registration from './WelcomeComponents/Registration';
 import App from './AppComponents/App';
-import Profile from './AppComponents/Profile';
+import ActivityFeed from './AppComponents/ActivityFeed';
+import Activity from './AppComponents/Activity';
 
 const router = (
     <Router history={browserHistory}>
         <Route path='/' component={App}>
-            <IndexRoute component={Profile} />
+            <Route path='activity/:id' component={Activity} />
+            <IndexRoute component={ActivityFeed} />
         </Route>
     </Router>
 );

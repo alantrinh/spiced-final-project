@@ -27,22 +27,40 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.use(express.static(__dirname + '/public'));
+app.use('/public', express.static(__dirname + '/public'));
+app.use('/uploads', express.static(__dirname + '/uploads'));
 
 app.use('/', require('./routes/router')); //put router after everything it needs in index file
 
 app.get('/welcome', (req, res) => {
-    if (req.session.user) {
-        return res.redirect('/');
+    if (!req.session.user) {
+        res.sendFile(__dirname + '/public/index.html');
+    } else {
+        res.redirect('/');
     }
-    res.sendFile(__dirname + '/public/index.html');
+});
+
+app.get('/', (req, res) => {
+    if (req.session.user) {
+        db.checkRecordExists('*', 'athletes', 'id = $1', [req.session.user.id]).then((userExists) => {
+            if (userExists) {
+                res.sendFile(__dirname + '/public/index.html');
+            } else {
+                req.session.user = null;
+                res.redirect('/welcome');
+            }
+        });
+    } else {
+        res.redirect('/welcome');
+    }
 });
 
 app.get('*', (req, res) => {
-    if (!req.session.user) {
-        return res.redirect('/welcome');
+    if (req.session.user) {
+        res.sendFile(__dirname + '/public/index.html');
+    } else {
+        res.redirect('/welcome');
     }
-    res.sendFile(__dirname + '/public/index.html');
 });
 
 app.listen(8080, () => {

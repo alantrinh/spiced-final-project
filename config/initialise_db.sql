@@ -24,11 +24,9 @@ CREATE TABLE follower_requests (
 
 CREATE TABLE activities (
     id SERIAL PRIMARY KEY,
-    sport VARCHAR(60) NOT NULL,
-    type VARCHAR(60) NOT NULL,
-    title VARCHAR(255) NOT NULL,
+    user_id VARCHAR(255) NOT NULL,
+    title VARCHAR(255),
     description TEXT,
-    activity_date TIMESTAMP,
-    distance DECIMAL(4,2),
-    acitvity_time TIMESTAMP
+    file_name VARCHAR(300) NOT NULL,
+    data JSONB NOT NULL
 );

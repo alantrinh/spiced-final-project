@@ -4,6 +4,23 @@ const db = require('./../config/db.js');
 const EasyFit = require('easy-fit').default;
 const fs = require('fs');
 
+const multer = require('multer');
+var diskStorage = multer.diskStorage({
+    destination: (req, file, callback) => {
+        callback(null, __dirname + '/../uploads');
+    },
+    filename: (req, file, callback) => {
+        callback(null, Date.now() + '_' + Math.floor(Math.random() * 99999999) + '_' + file.originalname);
+    }
+});
+
+var uploader = multer({
+    storage: diskStorage,
+    limits: {
+        filesize: 2097152
+    }
+});
+
 //ROUTES
 router.route('/registerAthlete')
 
@@ -52,25 +69,73 @@ router.route('/authenticateUser')
 
 router.route('/uploadActivity')
 
-    .post((req, res) => {
-        fs.readFile(__dirname + '/2015-04-13-08-40-11.fit', (err, content) => {
-            let easyFit = new EasyFit({
-                lengthUnit: 'km',
-                speedUnit: 'km/h',
-            });
+    .post(uploader.single('file'), (req, res) => {
+        if (req.file) {
+            fs.readFile(__dirname + '/../uploads/' + req.file.filename, (err, content) => {
+                let easyFit = new EasyFit({
+                    lengthUnit: 'km',
+                    speedUnit: 'km/h',
+                });
 
-            easyFit.parse(content, (err, data) => {
-                if (err) {
-                    return res.json({
-                        error: true,
-                        errorMessage: err
-                    });
-                } else {
-                    res.json ({
-                        success: true,
-                        data: JSON.stringify(data)
-                    });
-                }
+                easyFit.parse(content, (err, activityData) => {
+                    if (err) {
+                        res.json({
+                            error: true,
+                            errorMessage: err
+                        });
+                    } else {
+                        db.uploadActivity(req.session.user.id, req.file.filename, JSON.stringify(activityData)).then(() => {
+                            // res.json ({
+                            //     success: true,
+                            //     data: JSON.stringify(activityData)
+                            // });
+                            res.send(JSON.stringify(activityData));
+                        }).catch((err) => {
+                            console.log(err);
+                            res.json({
+                                error: true,
+                                errorMessage: err
+                            });
+                        });
+                    }
+                });
+            });
+        } else {
+            res.json({
+                error: true,
+                errorMessage: 'Upload of activity failed'
+            });
+        }
+    });
+
+router.route('/getUserActivities')
+
+    .get((req, res) => {
+        db.getUserActivities(req.session.user.id).then((results) => {
+            res.json({
+                data: results
+            });
+        }).catch((err) => {
+            console.log(err);
+            res.json({
+                error: true,
+                errorMessage: err
+            });
+        });
+    });
+
+router.route('/activity')
+
+    .get((req, res) => {
+        db.getActivity(req.query.id).then((results) => {
+            res.json({
+                data:results
+            });
+        }).catch((err) => {
+            console.log(err);
+            res.json({
+                error: true,
+                errorMessage: err
             });
         });
     });

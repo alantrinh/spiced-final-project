@@ -88,6 +88,33 @@ label[for="activity-input"] {
     cursor: pointer;
 }
 
+#activity {
+    display: flex;
+    justify-content: space-between;
+}
+
+#activity-details-wrapper {
+    width: 50%;
+}
+
+.activity-details {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+}
+
+.activity-details div {
+    width: 33%;
+}
+
+#activity-details-row-3 {
+    width: 100%;
+}
+
+#activity-details-row-3 div {
+    display: inline-block;
+    width: 33%
+}
 .error {
     color: red;
 }

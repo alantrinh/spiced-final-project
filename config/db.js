@@ -91,7 +91,65 @@ function authenticateUser(email, password) {
     });
 }
 
+function uploadActivity(userId, fileName, activityData) {
+    return new Promise((resolve, reject) => {
+        db.query('INSERT INTO activities (user_id, file_name, data) VALUES ($1, $2, $3);', [userId, fileName, activityData]).then(() => {
+            resolve();
+        }).catch((err) => {
+            console.log(err);
+            reject('error inserting file to database, please try again');
+        });
+    });
+}
+
+function getUserActivities(userId) {
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT id , title,
+        data->'sessions'->0->>'start_time' AS start_time,
+        data->'sessions'->0->>'total_distance' AS distance,
+        data->'sessions'->0->>'total_ascent' AS elevation
+        FROM activities
+        WHERE user_id = $1
+        ORDER BY data->'sessions'->0->>'start_time' DESC;`, [userId]).then((results) => {
+            resolve(results.rows);
+        }).catch((err) => {
+            reject(err);
+        });
+    });
+}
+
+function getActivity(activityId) {
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT id, user_id, title, description,
+        data->'sessions'->0->>'start_time' AS start_time,
+        data->'sessions'->0->>'total_distance' AS distance,
+        data->'sessions'->0->>'total_timer_time' AS moving_time,
+        data->'sessions'->0->>'total_ascent' AS elevation,
+        data->'sessions'->0->>'normalized_power' AS weighted_avg_power,
+        data->'sessions'->0->>'total_work' AS total_work,
+        data->'sessions'->0->>'avg_speed' AS avg_speed,
+        data->'sessions'->0->>'max_speed' AS max_speed,
+        data->'sessions'->0->>'avg_heart_rate' AS avg_heart_rate,
+        data->'sessions'->0->>'max_heart_rate' AS max_heart_rate,
+        data->'sessions'->0->>'avg_cadence' AS avg_cadence,
+        data->'sessions'->0->>'max_cadence' AS max_cadence,
+        data->'sessions'->0->>'avg_power' AS avg_power,
+        data->'sessions'->0->>'max_power' AS max_power,
+        data->'sessions'->0->>'total_calories' AS calories,
+        data->'sessions'->0->>'total_elapsed_time' AS elapsed_time
+        FROM activities
+        WHERE id = $1;`, [activityId]).then((results) => {
+            resolve(results.rows[0]);
+        }).catch((err) => {
+            reject((err));
+        });
+    });
+}
+
 module.exports.initialiseDb = initialiseDb;
 module.exports.checkRecordExists = checkRecordExists;
 module.exports.insertAthlete = insertAthlete;
 module.exports.authenticateUser = authenticateUser;
+module.exports.uploadActivity = uploadActivity;
+module.exports.getUserActivities = getUserActivities;
+module.exports.getActivity = getActivity;

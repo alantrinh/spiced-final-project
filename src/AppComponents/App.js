@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from './../axios';
+import {browserHistory} from 'react-router';
 
 export default class App extends React.Component {
     constructor(props) {
