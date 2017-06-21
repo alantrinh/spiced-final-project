@@ -9,10 +9,10 @@ export default class ActivityFeed extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('/getUserActivities').then((resp) => {
+        axios.get('/getFollowedActivities').then((resp) => {
             this.setState({activities: resp.data.data});
 
-            // console.log(this.state.data.data[0]);
+            // console.log(this.state.activities);
         });
     }
 
@@ -22,16 +22,17 @@ export default class ActivityFeed extends React.Component {
         if (this.state.activities) {
             activities = this.state.activities.map((activity) => {
                 return (
-                    <div className='profile-activity' key={activity.id}>
-
-                        {(new Date(activity['start_time'])).toLocaleString()}<br />
-
-                        <Link to={'/activity/' + activity.id}>{activity.title ? activity.title : 'Ride'}</Link>
+                    <div className='feed-activity' key={activity.id}>
                         <div>
-                        {Math.round(activity.distance * 100) / 100}km<br />
-                        {Math.round(activity.elevation * 1000)}m
+                            <img className='feed-profile-image' src={activity['image_url'] ? activity['image_url'] : '/public/images/profile_placeholder.jpg'} />
                         </div>
+                        <div>
+                            {activity.first_name} {activity.last_name}<br />
+                            {(new Date(activity['start_time'])).toLocaleString()}<br /><br />
 
+                            <Link to={'/activity/' + activity.id}>{activity.title ? activity.title : 'Ride'}</Link><br />
+                            <span>{Math.round(activity.distance * 100) / 100}km {Math.round(activity.elevation * 1000)}m</span>
+                        </div>
                         <br />
                     </div>
                 );
@@ -40,7 +41,7 @@ export default class ActivityFeed extends React.Component {
 
 
         return (
-                <div id='profile-wrapper'>
+                <div id='activity-feed-wrapper'>
                     <h1>Activity Feed</h1>
                     {activities}
                 </div>

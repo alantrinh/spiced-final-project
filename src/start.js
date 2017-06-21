@@ -7,11 +7,19 @@ import Registration from './WelcomeComponents/Registration';
 import App from './AppComponents/App';
 import ActivityFeed from './AppComponents/ActivityFeed';
 import Activity from './AppComponents/Activity';
+import Search from './AppComponents/Search';
+import Profile from './AppComponents/Profile';
+import Athlete from './AppComponents/Athlete';
+import Followers from './AppComponents/Followers';
 
 const router = (
     <Router history={browserHistory}>
         <Route path='/' component={App}>
             <Route path='activity/:id' component={Activity} />
+            <Route path='search' component={Search} />
+            <Route path='profile' component={Profile} />
+            <Route path='athlete/:id' component={Athlete} />
+            <Route path='followers' component={Followers} />
             <IndexRoute component={ActivityFeed} />
         </Route>
     </Router>

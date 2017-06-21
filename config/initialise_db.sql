@@ -9,7 +9,9 @@ CREATE TABLE athletes (
     email VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(60) NOT NULL,
     image_url VARCHAR(300),
-    bio TEXT,
+    city VARCHAR(255),
+    state VARCHAR (255),
+    country VARCHAR (255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -24,7 +26,7 @@ CREATE TABLE follower_requests (
 
 CREATE TABLE activities (
     id SERIAL PRIMARY KEY,
-    user_id VARCHAR(255) NOT NULL,
+    user_id INTEGER NOT NULL,
     title VARCHAR(255),
     description TEXT,
     file_name VARCHAR(300) NOT NULL,

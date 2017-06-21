@@ -85,6 +85,12 @@ router.route('/uploadActivity')
                         });
                     } else {
                         db.uploadActivity(req.session.user.id, req.file.filename, JSON.stringify(activityData)).then(() => {
+                            fs.unlink(__dirname + '/../uploads/' + req.file.filename, (err) => { //remove .fit file from server after upload to database
+                                if(err) {
+                                    console.log("unlink of activity failed", err);
+                                }
+                            });
+
                             // res.json ({
                             //     success: true,
                             //     data: JSON.stringify(activityData)
@@ -124,12 +130,12 @@ router.route('/getUserActivities')
         });
     });
 
-router.route('/activity')
+router.route('/getFollowedActivities')
 
     .get((req, res) => {
-        db.getActivity(req.query.id).then((results) => {
+        db.getFollowedActivities(req.session.user.id).then((results) => {
             res.json({
-                data:results
+                data: results
             });
         }).catch((err) => {
             console.log(err);
@@ -138,6 +144,314 @@ router.route('/activity')
                 errorMessage: err
             });
         });
+    });
+
+router.route('/getUserActivitySummary')
+
+    .get((req, res) => {
+        db.getUserActivitySummary(req.query.id).then((results) => {
+            res.json({data: results});
+        }).catch((err) => {
+            console.log(err);
+            res.json({
+                error: true,
+                errorMessage: err
+            });
+        });
+    });
+
+router.route('/activity')
+
+    .get((req, res) => {
+        db.getActivity(req.query.id).then((results) => {
+            res.json({
+                data: results,
+                ownActivity: results.user_id == req.session.user.id
+            });
+        }).catch((err) => {
+            console.log(err);
+            res.json({
+                error: true,
+                errorMessage: err
+            });
+        });
+    });
+
+router.route('/athletes')
+
+    .get((req, res) => {
+        if (req.query.q) {
+            if (req.query.q == 'all') {
+                db.searchAthletes().then((results) => {
+                    res.json({
+                        success: true,
+                        data: results
+                    });
+                }).catch((err) => {
+                    res.json({
+                        error: true,
+                        errorMessage: err
+                    });
+                });
+            } else {
+                db.searchAthletes(req.query.q).then((results) => {
+                    res.json({
+                        success: true,
+                        data: results
+                    });
+                }).catch((err) => {
+                    res.json({
+                        error: true,
+                        errorMessage: err
+                    });
+                });
+            }
+        } else {
+            res.json({
+                id: req.session.user.id,
+                firstName: req.session.user['first_name'],
+                lastName: req.session.user['last_name'],
+                email: req.session.user.email,
+                imageUrl: req.session.user['image_url'],
+                city: req.session.user.city,
+                state: req.session.user.state,
+                country: req.session.user.country
+            });
+        }
+    });
+
+router.route('/athlete')
+
+    .get((req, res) => {
+        if (req.query.id == req.session.user.id) {
+            res.json({redirect: true});
+        } else {
+            db.getAthleteById(req.query.id).then((result) => {
+                res.json({data: result});
+            }).catch((err) => {
+                console.log(err);
+                res.json({
+                    error: true,
+                    errorMessage: err
+                });
+            });
+        }
+    });
+
+router.route('/updateLocation')
+
+    .post((req, res) => {
+        let updateLocationPromises = [];
+        if (req.body.city) {updateLocationPromises.push(db.updateCity(req.body.city, req.session.user.id));}
+        if (req.body.state) {updateLocationPromises.push(db.updateState(req.body.state, req.session.user.id));}
+        if (req.body.country) {updateLocationPromises.push(db.updateCountry(req.body.country, req.session.user.id));}
+
+        Promise.all(updateLocationPromises).then(() => {
+            req.session.user.city = req.body.city;
+            req.session.user.state = req.body.state;
+            req.session.user.country = req.body.country;
+
+            res.json({
+                success: true
+            });
+        }).catch((err) => {
+            console.log(err);
+            res.json({
+                error: true,
+                errorMessage: 'location update failed'
+            });
+        });
+    });
+
+router.route('/uploadProfileImage')
+
+    .post(uploader.single('file'), (req, res) => {
+        if (req.file) {
+            db.uploadProfileImage(req.file.filename, req.session.user.id).then((result) => {
+                req.session.user['image_url'] != null && fs.unlink(__dirname + '/..' + req.session.user['image_url'], (err) => {
+                    if (err) {
+                        console.log("unlink failed", err);
+                    }
+                });
+
+                req.session.user['image_url'] = result['image_url'];
+                res.json({
+                    success: true,
+                    imageUrl: result['image_url']
+                });
+            }).catch((err) => {
+                res.json({
+                    error: true,
+                    errorMessage: err
+                });
+            });
+        } else {
+            res.json({
+                error: true,
+                errorMessage: 'Upload of profile image failed'
+            });
+        }
+    });
+
+router.route('/updateActivity')
+
+    .post((req, res) => {
+        db.updateActivity(req.body.id, req.body.title, req.body.description).then((results) => {
+            res.json({
+                data: results
+            });
+        }).catch((err) => {
+            console.log(err);
+            res.json({
+                error: true,
+                errorMessage: err
+            });
+        });
+    });
+
+//=====SOCIAL ROUTES======//
+
+router.route('/friendStatus/:id')
+
+    .get((req, res) => {
+        db.getFriendStatus(req.params.id, req.session.user.id, req.body.friendStatus).then((result) => {
+            let recipient;
+            if (result['recipient_id'] == req.session.user.id) {
+                recipient = true;
+            } else {
+                recipient = false;
+            }
+            res.json({
+                success: true,
+                friendStatus: result.status,
+                recipient: recipient
+            });
+        }).catch((err) => {
+            res.json({
+                error: true,
+                errorMessage: err
+            });
+        });
+    });
+
+router.route('/makeFriendRequest/:id')
+
+    .post((req, res) => {
+        db.makeFriendRequest(req.params.id, req.session.user.id, req.body.friendStatus).then((result) => {
+            res.json({
+                success: true,
+                friendStatus: result,
+                recipient: false
+            });
+        }).catch((err) => {
+            res.json({
+                error: true,
+                errorMessage: err
+            });
+        });
+    });
+
+router.route('/cancelFriendRequest/:id')
+
+    .post((req, res) => {
+        db.cancelFriendRequest(req.params.id, req.session.user.id).then((result) => {
+            res.json({
+                success: true,
+                friendStatus: result
+            });
+        }).catch((err) => {
+            res.json({
+                error: true,
+                errorMessage: err
+            });
+        });
+    });
+
+router.route('/acceptFriendRequest/:id')
+
+    .post((req, res) => {
+        db.acceptFriendRequest(req.session.user.id, req.params.id).then((result) => {
+            res.json({
+                success: true,
+                friendStatus: result
+            });
+        }).catch((err) => {
+            res.json({
+                error: true,
+                errorMessage: err
+            });
+        });
+    });
+
+router.route('/unfriend/:id')
+
+    .post((req, res) => {
+        db.unfriend(req.params.id, req.session.user.id).then((result) => {
+            res.json({
+                success: true,
+                friendStatus: result
+            });
+        }).catch((err) => {
+            res.json({
+                error: true,
+                errorMessage: err
+            });
+        });
+    });
+
+router.route('/getReceivedFriendRequests')
+
+    .get((req, res) => {
+        db.getReceivedFriendRequests(req.session.user.id).then((results) => {
+            res.json({
+                success: true,
+                data: results
+            });
+        }).catch((err) => {
+            res.json({
+                error: true,
+                errorMessage: err
+            });
+        });
+    });
+
+router.route('/getSentFriendRequests')
+
+    .get((req, res) => {
+        db.getSentFriendRequests(req.session.user.id).then((results) => {
+            res.json({
+                success: true,
+                data: results
+            });
+        }).catch((err) => {
+            res.json({
+                error: true,
+                errorMessage: err
+            });
+        });
+    });
+
+router.route('/getFriends')
+
+    .get((req, res) => {
+        db.getFriends(req.session.user.id).then((results) => {
+            res.json({
+                success: true,
+                data: results
+            });
+        }).catch((err) => {
+            res.json({
+                error: true,
+                errorMessage: err
+            });
+        });
+    });
+
+router.route('/logOut')
+
+    .get((req, res) => {
+        req.session.user = null;
+        res.redirect('/welcome');
     });
 
 module.exports = router;

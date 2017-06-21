@@ -4,7 +4,6 @@ main {
 
 header {
     color: darkorange;
-    font-weight: bold;
 }
 
 #welcome {
@@ -66,16 +65,135 @@ header {
 header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid lightgrey;
+    padding: 5px;
+    max-height: 50px;
+}
+
+header > ul > li > a {
+    text-decoration: none;
+    color: darkorange;
+}
+
+header > ul >li > a:hover {
+    color: rgb(245, 92, 6);
+}
+
+header h1 {
+    margin: 0px;
+}
+
+#search-image {
+    height: 25px;
+    width: 25px;
+}
+
+#search-image:hover {
+    cursor: pointer;
+    box-shadow: 0 0 3px grey;
+    background-color: lightgrey;
+    border-radius: 50%;
+}
+
+#search-close {
+    color: darkgrey;
+    padding-left: 5px;
+}
+
+#search-close:hover {
+    cursor: pointer;
 }
 
 header ul {
     list-style-type: none;
     margin: 0px;
     padding: 0px;
+    display: flex;
+    align-items: center;
 }
 
 header ul li {
     display: inline;
+    align-items: center;
+    padding-left: 5px;
+}
+
+#profile-menu-wrapper {
+
+}
+
+#navbar-profile-image {
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    float: right;
+}
+
+#navbar-profile-image:hover {
+    cursor: pointer;
+    box-shadow: 0 0 10px grey;
+}
+
+#profile-menu {
+    clear: right;
+    display: block;
+    color: black;
+    background-color: white;
+    border: 1px solid lightgrey;
+    border-top: none;
+    font-weight: normal;
+    text-align: right;
+    position: absolute;
+    top: 70px;
+    right: 15px;
+    padding: 5px;
+}
+
+#profile-menu li {
+    display: block;
+}
+
+#profile-menu li:hover {
+    cursor: pointer;
+    color: grey;
+    text-decoration: underline;
+}
+
+#profile-menu a {
+    text-decoration: none;
+    color: black;
+}
+
+#profile-menu a:hover {
+    color: grey;
+}
+
+.feed-activity {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+}
+
+.feed-activity div {
+    padding: 5px;
+}
+
+.feed-profile-image {
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+}
+
+.feed-activity div a {
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+}
+
+.feed-activity div a:hover {
+    text-decoration: underline;
+    color: blue;
 }
 
 #activity-input {
@@ -115,6 +233,35 @@ label[for="activity-input"] {
     display: inline-block;
     width: 33%
 }
+
+.search-result {
+    display: flex;
+    flex-direction: row;
+}
+
+.search-result img {
+    border-radius: 50%;
+    height: 75px;
+    width: 75px;
+}
+
+.profile-image {
+    border-radius: 50%;
+    height: 150px;
+    width: 150px;
+}
+
+label[for='profile-image-input']:hover {
+    cursor: pointer;
+    color: grey;
+}
+
+#profile-image-input {
+    transform: translateX(-2000px);
+    height: 1px;
+    width: 1px;
+}
+
 .error {
     color: red;
 }

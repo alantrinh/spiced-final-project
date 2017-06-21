@@ -10,7 +10,7 @@ export default class Welcome extends React.Component {
         return (
             <div>
                 <header>
-                    STRIVE
+                    <h1>STRIVE</h1>
                 </header>
                 <div id='welcome'>
                     {this.props.children}
