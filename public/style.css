@@ -211,6 +211,10 @@ label[for="activity-input"] {
     justify-content: space-between;
 }
 
+#kudos-count:hover {
+    cursor: pointer
+}
+
 #activity-details-wrapper {
     width: 50%;
 }

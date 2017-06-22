@@ -93,8 +93,8 @@ function authenticateUser(email, password) {
 
 function uploadActivity(userId, fileName, activityData) {
     return new Promise((resolve, reject) => {
-        db.query('INSERT INTO activities (user_id, file_name, data) VALUES ($1, $2, $3);', [userId, fileName, activityData]).then(() => {
-            resolve();
+        db.query('INSERT INTO activities (user_id, file_name, data) VALUES ($1, $2, $3) RETURNING id;', [userId, fileName, activityData]).then((results) => {
+            resolve(results.rows[0]);
         }).catch((err) => {
             console.log(err);
             reject('error inserting file to database, please try again');
@@ -190,6 +190,17 @@ function updateActivity(id, title, description) {
         }).catch((err) => {
             console.log(err);
             reject('unable to update activity');
+        });
+    });
+}
+
+function deleteActivity(id) {
+    return new Promise((resolve, reject) => {
+        db.query(`DELETE FROM activities WHERE id = $1;`, [id]).then(() => {
+            resolve();
+        }).catch((err) => {
+            console.log(err);
+            reject('unable to delete activity');
         });
     });
 }
@@ -389,6 +400,65 @@ function getFriends(currentUserId) {
     });
 }
 
+function giveKudos(activityId, userId) {
+    return new Promise((resolve, reject) => {
+        db.query(`INSERT INTO kudos (activity_id, user_id) VALUES ($1, $2);`, [activityId, userId]).then(() => {
+            resolve();
+        }).catch((err) => {
+            console.log(err);
+            reject('Error giving kudos, please try again');
+        });
+    });
+}
+
+function removeKudos(activityId, userId) {
+    return new Promise((resolve, reject) => {
+        db.query(`DELETE FROM kudos WHERE activity_id = $1 AND user_id = $2;`, [activityId, userId]).then(() => {
+            resolve();
+        }).catch((err) => {
+            console.log(err);
+            reject('Error giving kudos, please try again');
+        });
+    });
+}
+
+function hasAlreadyGivenKudos(activityId, userId) {
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT id FROM kudos WHERE activity_id = $1 AND user_id = $2;`, [activityId, userId]).then((results) => {
+            resolve(results.rows[0]);
+        }).catch((err) => {
+            console.log(err);
+            reject('Error checking if kudos already given, please try again');
+        });
+    });
+}
+
+function getKudosCount(activityId) {
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT count(id) FROM kudos WHERE activity_id = $1`, [activityId]).then((results) => {
+            resolve(results.rows[0]);
+        }).catch((err) => {
+            console.log(err);
+            reject('Error getting kudos count, please try again');
+        });
+    });
+}
+
+function getKudosGivers(activityId) {
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT image_url, first_name, last_name, city, state, country
+            FROM athletes
+            JOIN kudos
+            ON athletes.id = kudos.user_id
+            WHERE kudos.activity_id = $1;`, [activityId]).then((results) => {
+                resolve(results.rows);
+            }).catch((err) => {
+                console.log(err);
+                reject('Error retrieving kudos givers, please try again');
+            });
+    });
+}
+
 module.exports.initialiseDb = initialiseDb;
 module.exports.checkRecordExists = checkRecordExists;
 module.exports.insertAthlete = insertAthlete;
@@ -405,6 +475,7 @@ module.exports.updateState = updateState;
 module.exports.updateCountry = updateCountry;
 module.exports.uploadProfileImage = uploadProfileImage;
 module.exports.updateActivity = updateActivity;
+module.exports.deleteActivity = deleteActivity;
 
 module.exports.getFriendStatus = getFriendStatus;
 module.exports.makeFriendRequest = makeFriendRequest;
@@ -414,3 +485,9 @@ module.exports.unfriend = unfriend;
 module.exports.getReceivedFriendRequests = getReceivedFriendRequests;
 module.exports.getSentFriendRequests = getSentFriendRequests;
 module.exports.getFriends = getFriends;
+
+module.exports.giveKudos = giveKudos;
+module.exports.removeKudos = removeKudos;
+module.exports.hasAlreadyGivenKudos = hasAlreadyGivenKudos;
+module.exports.getKudosCount = getKudosCount;
+module.exports.getKudosGivers = getKudosGivers;

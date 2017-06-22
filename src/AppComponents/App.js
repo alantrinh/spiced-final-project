@@ -29,8 +29,9 @@ export default class App extends React.Component {
         var formData = new FormData();
         formData.append('file', e.target.files[0]);
 
-        axios.post('/uploadActivity', formData).then(() => {
+        axios.post('/uploadActivity', formData).then((resp) => {
             this.toggleProfileMenu();
+            browserHistory.push(`/activity/${resp.data.data.id}`);
         }).catch((err) => {
             console.log(err);
         });
@@ -82,7 +83,7 @@ export default class App extends React.Component {
                     </ul>
 
                     <div id='profile-menu-wrapper'>
-                        <img id='navbar-profile-image' onClick={this.toggleProfileMenu} src={this.state.imageUrl ? this.state.imageUrl : '/public/images/profile_placeholder.jpg'} />
+                        <img id='navbar-profile-image' title='Profile Menu' onClick={this.toggleProfileMenu} src={this.state.imageUrl ? this.state.imageUrl : '/public/images/profile_placeholder.jpg'} />
                         {this.state.showProfileMenu &&
                             <ul id='profile-menu'>
                                 <li><Link to='profile' onClick={this.toggleProfileMenu}>My Profile</Link></li>

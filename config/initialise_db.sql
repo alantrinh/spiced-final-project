@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS kudos;
 DROP TABLE IF EXISTS activities;
 DROP TABLE IF EXISTS follower_requests;
 DROP TABLE IF EXISTS athletes;
@@ -32,3 +33,9 @@ CREATE TABLE activities (
     file_name VARCHAR(300) NOT NULL,
     data JSONB NOT NULL
 );
+
+CREATE TABLE kudos (
+    id SERIAL PRIMARY KEY,
+    activity_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL
+)

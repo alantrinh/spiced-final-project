@@ -6,7 +6,7 @@ if (process.env.NODE_ENV != 'production') {
     app.use(require('./build'));
 }
 
-// db.initialiseDb();
+db.initialiseDb();
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
@@ -57,7 +57,14 @@ app.get('/', (req, res) => {
 
 app.get('*', (req, res) => {
     if (req.session.user) {
-        res.sendFile(__dirname + '/public/index.html');
+        db.checkRecordExists('*', 'athletes', 'id = $1', [req.session.user.id]).then((userExists) => {
+            if (userExists) {
+                res.sendFile(__dirname + '/public/index.html');
+            } else {
+                req.session.user = null;
+                res.redirect('/welcome');
+            }
+        });
     } else {
         res.redirect('/welcome');
     }

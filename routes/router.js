@@ -84,18 +84,16 @@ router.route('/uploadActivity')
                             errorMessage: err
                         });
                     } else {
-                        db.uploadActivity(req.session.user.id, req.file.filename, JSON.stringify(activityData)).then(() => {
+                        db.uploadActivity(req.session.user.id, req.file.filename, JSON.stringify(activityData)).then((results) => {
                             fs.unlink(__dirname + '/../uploads/' + req.file.filename, (err) => { //remove .fit file from server after upload to database
                                 if(err) {
                                     console.log("unlink of activity failed", err);
                                 }
                             });
-
-                            // res.json ({
-                            //     success: true,
-                            //     data: JSON.stringify(activityData)
-                            // });
-                            res.send(JSON.stringify(activityData));
+                            res.json ({
+                                data: results
+                            });
+                            // res.send(JSON.stringify(activityData));
                         }).catch((err) => {
                             console.log(err);
                             res.json({
@@ -309,6 +307,22 @@ router.route('/updateActivity')
         });
     });
 
+router.route('/deleteActivity')
+
+    .post((req, res) => {
+        db.deleteActivity(req.query.id).then(() => {
+            res.json({
+                success: true
+            });
+        }).catch((err) => {
+            console.log(err);
+            res.json({
+                error: true,
+                errorMessage: err
+            });
+        });
+    });
+
 //=====SOCIAL ROUTES======//
 
 router.route('/friendStatus/:id')
@@ -443,6 +457,68 @@ router.route('/getFriends')
             res.json({
                 error: true,
                 errorMessage: err
+            });
+        });
+    });
+
+router.route('/giveKudos')
+
+    .post((req, res) => {
+        db.giveKudos(req.query.id, req.session.user.id).then(() => {
+            res.json({
+                success: true
+            });
+        }).catch((err) => {
+            console.log(err);
+            res.json({
+                error: true,
+                errorMessage: err
+            });
+        });
+    });
+
+router.route('/removeKudos')
+
+    .post((req, res) => {
+        db.removeKudos(req.query.id, req.session.user.id).then(() => {
+            res.json({success: true});
+        }).catch((err) => {
+            console.log(err);
+            res.json({
+                error: true,
+                errorMessage: err
+            });
+        });
+    });
+
+router.route('/hasAlreadyGivenKudos')
+
+    .get((req, res) => {
+        db.hasAlreadyGivenKudos(req.query.id, req.session.user.id).then((hasGivenKudos) => {
+            res.send(hasGivenKudos);
+        }).catch((err) => {
+            console.log(err);
+            res.json({
+                error: true,
+                errorMessage: err
+            });
+        });
+    });
+
+router.route('/getKudosCount')
+
+    .get((req, res) => {
+        db.getKudosCount(req.query.id).then((results) => {
+            res.send(results);
+        });
+    });
+
+router.route('/getKudosGivers')
+
+    .get((req, res) => {
+        db.getKudosGivers(req.query.id).then((results) => {
+            res.json({
+                data: results
             });
         });
     });

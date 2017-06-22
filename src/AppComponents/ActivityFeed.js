@@ -6,6 +6,7 @@ export default class ActivityFeed extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
+
     }
 
     componentDidMount() {
@@ -15,6 +16,8 @@ export default class ActivityFeed extends React.Component {
             // console.log(this.state.activities);
         });
     }
+
+
 
     render() {
         let activities = '';

@@ -1,23 +1,42 @@
 import React from 'react';
 import axios from './../axios';
+import {browserHistory} from 'react-router';
 
 export default class Activity extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             id: this.props.params.id,
-            showEdit: false
+            showEdit: false,
+            showKudosGivers: false
         };
 
         this.handleChange = this.handleChange.bind(this);
         this.toggleEditFields = this.toggleEditFields.bind(this);
         this.updateActivity = this.updateActivity.bind(this);
+        this.giveKudos = this.giveKudos.bind(this);
+        this.removeKudos = this.removeKudos.bind(this);
+        this.showKudosGivers = this.showKudosGivers.bind(this);
+        this.hideKudosGivers = this.hideKudosGivers.bind(this);
+        this.deleteActivity = this.deleteActivity.bind(this);
     }
 
     componentDidMount() {
         axios.get(`/activity?id=${this.state.id}`).then((resp) => {
             this.setState(resp.data.data);
             this.setState({ownActivity: resp.data.ownActivity});
+        });
+
+        axios.get(`/hasAlreadyGivenKudos?id=${this.state.id}`).then((resp) => {
+            if (resp.data) {
+                this.setState({kudosAlreadyGiven: true});
+            } else {
+                this.setState({kudosAlreadyGiven: false});
+            }
+        });
+
+        axios.get(`/getKudosCount?id=${this.state.id}`).then((resp) => {
+            this.setState(resp.data);
         });
     }
 
@@ -43,8 +62,68 @@ export default class Activity extends React.Component {
         });
     }
 
+    giveKudos() {
+        axios.post(`/giveKudos?id=${this.state.id}`).then(() => {
+            axios.get(`/getKudosCount?id=${this.state.id}`).then((resp) => {
+                this.setState({
+                    count: resp.data.count,
+                    kudosAlreadyGiven: true
+                });
+            });
+        });
+    }
+
+    removeKudos() {
+        axios.post(`/removeKudos?id=${this.state.id}`).then(() => {
+            axios.get(`/getKudosCount?id=${this.state.id}`).then((resp) => {
+                this.setState({
+                    count: resp.data.count,
+                    kudosAlreadyGiven: false
+                });
+            });
+        });
+    }
+
+    showKudosGivers() {
+        axios.get(`/getKudosGivers?id=${this.state.id}`).then((resp) => {
+            console.log(resp.data.data);
+            this.setState({
+                showKudosGivers: true,
+                kudosGivers: resp.data.data
+            });
+        });
+    }
+
+    hideKudosGivers() {
+        this.setState({showKudosGivers: false});
+    }
+
+    deleteActivity() {
+        console.log('click');
+        axios.post(`/deleteActivity?id=${this.state.id}`).then(() => {
+            browserHistory.push('/');
+        });
+    }
+
     render() {
         let activity = '';
+        var kudosGivers = '';
+
+        if (this.state.kudosGivers) {
+            kudosGivers = this.state.kudosGivers.map((kudosGiver) => {
+                return (
+                    <div className='kudos-giver'>
+                        <div>
+                            <img className='feed-profile-image' src={kudosGiver['image_url'] ? kudosGiver['image_url'] : '/public/images/profile_placeholder.jpg'} />
+                        </div>
+                        <div>
+                            {kudosGiver.first_name} {kudosGiver.last_name}<br />
+                            <div>{kudosGiver.city} {kudosGiver.city && ','}{kudosGiver.state} {(kudosGiver.city || kudosGiver.state) && ','}{kudosGiver.country}</div>
+                        </div>
+                    </div>
+                );
+            });
+        }
 
         if (this.state.first_name) {
             activity = (
@@ -64,9 +143,15 @@ export default class Activity extends React.Component {
                                 (<div>
                                     {this.state.title ? this.state.title : 'Ride'}
                                     <p>{this.state.description}</p>
-                                    {this.state.ownActivity && <button onClick={this.toggleEditFields}>Edit activity</button>}    
-                            </div>)
+                                    {this.state.ownActivity &&
+                                        <div>
+                                            <button onClick={this.toggleEditFields}>Edit activity</button><br />
+                                            <button onClick={this.deleteActivity}>Delete activity</button>
+                                        </div>}
+                                </div>)
                             }
+                            {this.state.kudosAlreadyGiven ? <button title='Remove Kudos' onClick={this.removeKudos}>Remove Kudos</button> : <button title='Give Kudos' onClick={this.giveKudos}>Give Kudos</button>} {this.state.showKudosGivers ? <span id='kudos-count' onClick={this.hideKudosGivers}>{this.state.count} {kudosGivers}</span> : <span id='kudos-count' onClick={this.showKudosGivers}>{this.state.count}</span>}<br />
+
                         </div>
                         <div id='activity-details-wrapper'>
                             <div className='activity-details' id='activity-details-row-1'>
