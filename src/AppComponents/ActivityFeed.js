@@ -12,8 +12,6 @@ export default class ActivityFeed extends React.Component {
     componentDidMount() {
         axios.get('/getFollowedActivities').then((resp) => {
             this.setState({activities: resp.data.data});
-
-            // console.log(this.state.activities);
         });
     }
 
@@ -30,11 +28,11 @@ export default class ActivityFeed extends React.Component {
                             <img className='feed-profile-image' src={activity['image_url'] ? activity['image_url'] : '/public/images/profile_placeholder.jpg'} />
                         </div>
                         <div>
-                            {activity.first_name} {activity.last_name}<br />
-                            {(new Date(activity['start_time'])).toLocaleString()}<br /><br />
+                            <Link to={'/athlete/' + activity['user_id']}><span className='feed-name'>{activity.first_name} {activity.last_name}</span></Link><br />
+                            <span className='feed-date'>{(new Date(activity['start_time'])).toLocaleString()}</span><br /><br />
 
-                            <Link to={'/activity/' + activity.id}>{activity.title ? activity.title : 'Ride'}</Link><br />
-                            <span>{Math.round(activity.distance * 100) / 100}km {Math.round(activity.elevation * 1000)}m</span>
+                            <Link className='feed-activity-title' to={'/activity/' + activity.id}>{activity.title ? activity.title : 'Ride'}</Link><br />
+                            <span className='feed-stats'>{Math.round(activity.distance * 100) / 100}km {Math.round(activity.elevation * 1000)}m</span>
                         </div>
                         <br />
                     </div>

@@ -122,7 +122,7 @@ function getUserActivities(userId) {
 
 function getFollowedActivities(userId) {
     return new Promise((resolve, reject) => {
-        db.query(`SELECT first_name, last_name, image_url, activities.id, title,
+        db.query(`SELECT first_name, last_name, image_url, activities.id, user_id, title,
         data->'sessions'->0->>'start_time' AS start_time,
         data->'sessions'->0->>'total_distance' AS distance,
         data->'sessions'->0->>'total_ascent' AS elevation
@@ -296,7 +296,18 @@ function uploadProfileImage(imageUrl, id) {
             }
         }).catch((err) => {
             console.log(err);
-            reject('unable to update profile image, please try again');
+            reject('Unable to update profile image, please try again');
+        });
+    });
+}
+
+function deleteProfileImage(id) {
+    return new Promise((resolve, reject) => {
+        db.query(`UPDATE athletes SET image_url = null WHERE id = $1;`, [id]).then(() => {
+            resolve();
+        }).catch((err) => {
+            console.log(err);
+            reject('Unable to delete profile image, please try again');
         });
     });
 }
@@ -446,7 +457,7 @@ function getKudosCount(activityId) {
 
 function getKudosGivers(activityId) {
     return new Promise((resolve, reject) => {
-        db.query(`SELECT image_url, first_name, last_name, city, state, country
+        db.query(`SELECT athletes.id, image_url, first_name, last_name, city, state, country
             FROM athletes
             JOIN kudos
             ON athletes.id = kudos.user_id
@@ -474,6 +485,7 @@ module.exports.updateCity = updateCity;
 module.exports.updateState = updateState;
 module.exports.updateCountry = updateCountry;
 module.exports.uploadProfileImage = uploadProfileImage;
+module.exports.deleteProfileImage = deleteProfileImage;
 module.exports.updateActivity = updateActivity;
 module.exports.deleteActivity = deleteActivity;
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from './../axios';
-import {browserHistory} from 'react-router';
+import {browserHistory, Link} from 'react-router';
 
 export default class Activity extends React.Component {
     constructor(props) {
@@ -86,7 +86,6 @@ export default class Activity extends React.Component {
 
     showKudosGivers() {
         axios.get(`/getKudosGivers?id=${this.state.id}`).then((resp) => {
-            console.log(resp.data.data);
             this.setState({
                 showKudosGivers: true,
                 kudosGivers: resp.data.data
@@ -117,8 +116,8 @@ export default class Activity extends React.Component {
                             <img className='feed-profile-image' src={kudosGiver['image_url'] ? kudosGiver['image_url'] : '/public/images/profile_placeholder.jpg'} />
                         </div>
                         <div>
-                            {kudosGiver.first_name} {kudosGiver.last_name}<br />
-                            <div>{kudosGiver.city} {kudosGiver.city && ','}{kudosGiver.state} {(kudosGiver.city || kudosGiver.state) && ','}{kudosGiver.country}</div>
+                            <Link to={'/athlete/' + kudosGiver.id}>{kudosGiver.first_name} {kudosGiver.last_name}</Link><br />
+                            <div>{kudosGiver.city}{kudosGiver.city && ','} {kudosGiver.state}{(kudosGiver.city || kudosGiver.state) && ','} {kudosGiver.country}</div>
                         </div>
                     </div>
                 );
@@ -127,86 +126,100 @@ export default class Activity extends React.Component {
 
         if (this.state.first_name) {
             activity = (
-                <div id='activity'>
-                        <div id='activity-panel'>
-                            {this.state.first_name} {this.state.last_name}<br />
-                            {(new Date(this.state['start_time'])).toLocaleString()}<br />
-                            {this.state.showEdit ?
-                                (<form>
-                                    <input type='text' name='title' placeholder='title' value={this.state.title} onChange={this.handleChange}></input><br />
-                                    <textarea type='text' name='description' placeholder='description' value={this.state.description} onChange={this.handleChange}></textarea>
-                                    <br />
-                                    <button type='cancel' onClick={this.toggleEditFields}>Cancel</button>
-                                    <button type='submit' onClick={this.updateActivity}>Save</button>
-                                </form>)
+                <div id='activity-wrapper'>
+                    <div id='activity-header'>
+                        <h2>{this.state.first_name} {this.state.last_name}</h2>
+                        <span>{this.state.kudosAlreadyGiven ?
+                            <button title='Remove Kudos' onClick={this.removeKudos}>Remove Kudos</button>
+                            :
+                            <button title='Give Kudos' onClick={this.giveKudos}>Give Kudos</button>} {this.state.showKudosGivers ?
+                                <span id='kudos-count' onClick={this.hideKudosGivers}>{this.state.count}</span>
                                 :
-                                (<div>
-                                    {this.state.title ? this.state.title : 'Ride'}
-                                    <p>{this.state.description}</p>
-                                    {this.state.ownActivity &&
-                                        <div>
-                                            <button onClick={this.toggleEditFields}>Edit activity</button><br />
-                                            <button onClick={this.deleteActivity}>Delete activity</button>
-                                        </div>}
-                                </div>)
-                            }
-                            {this.state.kudosAlreadyGiven ? <button title='Remove Kudos' onClick={this.removeKudos}>Remove Kudos</button> : <button title='Give Kudos' onClick={this.giveKudos}>Give Kudos</button>} {this.state.showKudosGivers ? <span id='kudos-count' onClick={this.hideKudosGivers}>{this.state.count} {kudosGivers}</span> : <span id='kudos-count' onClick={this.showKudosGivers}>{this.state.count}</span>}<br />
-
-                        </div>
-                        <div id='activity-details-wrapper'>
-                            <div className='activity-details' id='activity-details-row-1'>
-                                <div>
-                                    {Math.round(this.state.distance * 100) / 100}km<br />
-                                    Distance
-                                </div>
-
-                                <div>
-                                    {new Date(this.state['moving_time'] * 1000).toISOString().substr(11, 8)}<br />
-                                    Moving Time
-                                </div>
-
-                                <div>
-                                    {Math.round(this.state.elevation * 100) / 100}m<br />
-                                    Elevation
+                                <span id='kudos-count' onClick={this.showKudosGivers}>{this.state.count}</span>}
+                        </span>
+                    </div>
+                    <div id='activity'>
+                            <div id='activity-panel'>
+                                <img id='activity-profile-image' src={this.state['image_url'] ? this.state['image_url'] : '/public/images/profile_placeholder.jpg'} />
+                                <div id='activity-panel-description'>
+                                    <span id='activity-panel-date'>{(new Date(this.state['start_time'])).toLocaleString()}</span>
+                                    {this.state.showEdit ?
+                                        (<form>
+                                            <input type='text' name='title' placeholder='title' value={this.state.title} onChange={this.handleChange}></input><br />
+                                            <textarea type='text' name='description' placeholder='description' value={this.state.description} onChange={this.handleChange}></textarea>
+                                            <br />
+                                            <button type='cancel' onClick={this.toggleEditFields}>Cancel</button>
+                                            <button type='submit' onClick={this.updateActivity}>Save</button>
+                                        </form>)
+                                        :
+                                        (<div>
+                                            <h2>{this.state.title ? this.state.title : 'Ride'}</h2>
+                                            <div id='activity-panel-description-text'>{this.state.description}</div>
+                                            {this.state.ownActivity &&
+                                                <div id='activity-panel-description-buttons'>
+                                                    <button onClick={this.toggleEditFields}>Edit activity</button>
+                                                    <button onClick={this.deleteActivity}>Delete activity</button>
+                                                </div>}
+                                        </div>)
+                                    }
                                 </div>
                             </div>
-                            <div className='activity-details' id='activity-details-row-2'>
-                                <div>
-                                    {this.state.weighted_avg_power}W<br />
-                                    Weighted Avg Power
-                                </div>
 
-                                <div>
-                                    {Math.round(this.state.total_work / 1000)}kJ<br />
-                                    Total Work
-                                </div>
+                            <div id='activity-details-wrapper'>
+                                <div className='activity-details' id='activity-details-row-1'>
+                                    <div>
+                                        <h2>{Math.round(this.state.distance * 100) / 100}km</h2>
+                                        <span className='activity-details-subtext'>Distance</span>
+                                    </div>
 
-                                <div></div>
+                                    <div>
+                                        <h2>{new Date(this.state['moving_time'] * 1000).toISOString().substr(11, 8)}</h2>
+                                        <span className='activity-details-subtext'>Moving Time</span>
+                                    </div>
+
+                                    <div>
+                                        <h2>{Math.round(this.state.elevation * 1000)}m</h2>
+                                        <span className='activity-details-subtext'>Elevation</span>
+                                    </div>
+                                </div>
+                                <div className='activity-details' id='activity-details-row-2'>
+                                    <div>
+                                        <h3>{this.state.weighted_avg_power}W</h3>
+                                        <span className='activity-details-subtext'>Weighted Avg Power</span>
+                                    </div>
+
+                                    <div>
+                                        <h3>{Math.round(this.state.total_work / 1000)}kJ</h3>
+                                        <span className='activity-details-subtext'>Total Work</span>
+                                    </div>
+
+                                    <div></div>
+                                </div>
+                                <div id='activity-details-row-3'>
+                                    <div></div>
+                                    <div className='activity-details-row-3-heading'>Avg</div>
+                                    <div className='activity-details-row-3-heading'>Max</div>
+                                    <div>Speed</div>
+                                    <div>{Math.round(this.state.avg_speed * 10) / 10}km/h</div>
+                                    <div>{Math.round(this.state.max_speed * 10) / 10}km/h</div>
+                                    <div>Heart Rate</div>
+                                    <div>{this.state.avg_heart_rate}bpm</div>
+                                    <div>{this.state.max_heart_rate}bpm</div>
+                                    <div>Cadence</div>
+                                    <div>{this.state.avg_cadence}</div>
+                                    <div>{this.state.max_cadence}</div>
+                                    <div>Power</div>
+                                    <div>{this.state.avg_power}</div>
+                                    <div>{this.state.max_power}</div>
+                                    <div>Calories</div>
+                                    <div>{this.state.calories}</div>
+                                    <div></div>
+                                    <div>Elapsed Time</div>
+                                    <div>{new Date(this.state.elapsed_time * 1000).toISOString().substr(11, 8)}</div>
+                                    <div></div>
+                                </div>
                             </div>
-                            <div id='activity-details-row-3'>
-                                <div></div>
-                                <div>Avg</div>
-                                <div>Max</div>
-                                <div>Speed</div>
-                                <div>{Math.round(this.state.avg_speed * 10) / 10}km/h</div>
-                                <div>{Math.round(this.state.max_speed * 10) / 10}km/h</div>
-                                <div>Heart Rate</div>
-                                <div>{this.state.avg_heart_rate}bpm</div>
-                                <div>{this.state.max_heart_rate}bpm</div>
-                                <div>Cadence</div>
-                                <div>{this.state.avg_cadence}</div>
-                                <div>{this.state.max_cadence}</div>
-                                <div>Power</div>
-                                <div>{this.state.avg_power}</div>
-                                <div>{this.state.max_power}</div>
-                                <div>Calories</div>
-                                <div>{this.state.calories}</div>
-                                <div></div>
-                                <div>Elapsed Time</div>
-                                <div>{new Date(this.state.elapsed_time * 1000).toISOString().substr(11, 8)}</div>
-                                <div></div>
-                            </div>
-                        </div>
+                    </div>
                 </div>
             );
         }
@@ -214,6 +227,7 @@ export default class Activity extends React.Component {
         return (
             <div>
                 {activity}
+                {this.state.showKudosGivers ? <div id='kudos-wrapper'>These athletes gave kudos: <br /><div id='kudos-givers'>{kudosGivers}</div></div> : ''}
             </div>
         );
     }

@@ -16,13 +16,11 @@ export default class Athlete extends React.Component {
             if (resp.data.redirect) {
                 browserHistory.push('/profile');
             } else {
-                console.log(resp.data.data);
                 this.setState(resp.data.data);
             }
         });
 
         axios.get(`/getUserActivitySummary?id=${this.state.id}`).then((resp) => {
-            console.log(resp.data.data);
             this.setState(resp.data.data);
         });
     }
@@ -37,16 +35,18 @@ export default class Athlete extends React.Component {
 
     render() {
         return (
-            <div id='athlete-wrapper'>
+            <div id='profile-wrapper'>
                 <div>
                     <img className='profile-image' src={this.state['image_url'] ? this.state['image_url'] : '/public/images/profile_placeholder.jpg'} />
-                    <div>{this.state['first_name']} {this.state['last_name']}</div>
-                    <div>{this.state.city} {this.state.city && ','}{this.state.state} {(this.state.city || this.state.state) && ','}{this.state.country}</div>
-                    <FollowButton id={this.state.id}/>
+                    <div className='profile'>
+                        <h2>{this.state['first_name']} {this.state['last_name']}</h2>
+                        <p><div className='location-profile'>{this.state.city}{this.state.city && this.state.state && ', '}{this.state.state}{(this.state.city || this.state.state) && ', '}{this.state.country}</div></p>
+                        <FollowButton id={this.state.id}/>
+                    </div>
                 </div>
-                <div>
-                    {this.state['activity_count']}<br />
-                    Total Activities
+                <div id='profile-activity-count'>
+                    <h2>{this.state['activity_count']}</h2>
+                    <span id='profile-total-activities'>Total Activities</span>
                 </div>
             </div>
         );

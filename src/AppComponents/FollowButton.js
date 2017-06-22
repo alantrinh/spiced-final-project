@@ -86,22 +86,22 @@ export default class FollowButton extends React.Component {
         let label;
         let action;
         if (this.state.friendStatus == null || this.state.friendStatus == 'unfriended' || this.state.friendStatus == 'cancelled') {
-            label = 'Make Friend Request';
+            label = 'Request to Follow';
             action = this.makeFriendRequest;
         } else if (this.state.friendStatus == 'pending' && this.state.recipient) {
-            label = 'Accept Friend Request';
+            label = 'Accept Follow Request';
             action = this.acceptFriendRequest;
         } else if (this.state.friendStatus == 'pending' && !this.state.recipient) {
-            label = 'Cancel Friend Request';
+            label = 'Cancel Follow Request';
             action = this.cancelFriendRequest;
         } else if (this.state.friendStatus == 'accepted') {
-            label = 'Unfriend';
+            label = 'Unfollow';
             action = this.unfriend;
         }
 
         return (
             <Link onClick={action}>
-                <span className='friend-button'>
+                <span className='follow-button'>
                     {label}
                 </span>
             </Link>

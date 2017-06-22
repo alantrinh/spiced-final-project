@@ -291,6 +291,29 @@ router.route('/uploadProfileImage')
         }
     });
 
+router.route('/deleteProfileImage')
+
+    .post((req, res) => {
+        db.deleteProfileImage(req.session.user.id).then(()=> {
+            fs.unlink(__dirname + '/..' + req.session.user['image_url'], (err) => {
+                if(err) {
+                    console.log("unlink failed", err);
+                }
+            });
+
+            req.session.user['image_url'] = null;
+            res.json({
+                success: true,
+            });
+        }).catch((err) => {
+            console.log(err);
+            res.json({
+                error: true,
+                errorMessage: 'Delete profile image failed'
+            });
+        });
+    });
+
 router.route('/updateActivity')
 
     .post((req, res) => {

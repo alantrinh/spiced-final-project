@@ -59,16 +59,17 @@ export default class Registration extends React.Component {
     render() {
         return (
             <div id='welcome-child'>
-                <h2>Join us</h2>
-                {this.state.error && <div className="error"> {this.state.errorMessage}</div>}
-                <form onSubmit={this.handleSubmit}>
-                    <p><input type="text" name="firstName" placeholder="First Name" value={this.state.firstName} onChange={this.handleChange}/></p>
-                    <p><input type="text" name="lastName" placeholder="Last Name" value={this.state.lastName} onChange={this.handleChange} /></p>
-                    <p><input type="text" name="email" placeholder="Email" value={this.state.email} onChange={this.handleChange} /></p>
-                    <p><input type="password" name="password" placeholder="Password" value={this.state.password} onChange={this.handleChange} /></p>
-                    <p><input type="submit" value="Submit" /></p>
-                    <p><Link to="/">Already a member? Login here</Link></p>
-                </form>
+                <div>
+                    <h2>Join us</h2>
+                    {this.state.error && <div className="error"> {this.state.errorMessage}</div>}
+                    <form onSubmit={this.handleSubmit}>
+                        <p><input type="text" name="firstName" placeholder="First Name" value={this.state.firstName} onChange={this.handleChange}/></p>
+                        <p><input type="text" name="lastName" placeholder="Last Name" value={this.state.lastName} onChange={this.handleChange} /></p>
+                        <p><input type="text" name="email" placeholder="Email" value={this.state.email} onChange={this.handleChange} /></p>
+                        <p><input type="password" name="password" placeholder="Password" value={this.state.password} onChange={this.handleChange} /></p>
+                        <p><input type="submit" value="Submit" /></p>
+                    </form>
+                </div>
             </div>
         );
     }

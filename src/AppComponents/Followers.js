@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from './../axios';
 import {Link} from 'react-router';
+import FollowButton from './FollowButton';
 
 export default class Followers extends React.Component {
     constructor(props) {
@@ -87,12 +88,12 @@ export default class Followers extends React.Component {
                 return (
                     <div className='friend-request' key={receivedFriendRequest.id}>
                         <Link to={'/athlete/' + receivedFriendRequest['sender_id']}>
-                            <img src={receivedFriendRequest['image_url'] ? receivedFriendRequest['image_url'] : '/public/images/profile_placeholder.jpg'} />
+                            <img className='profile-image' src={receivedFriendRequest['image_url'] ? receivedFriendRequest['image_url'] : '/public/images/profile_placeholder.jpg'} />
                             <div><Link to={'/athlete/' + receivedFriendRequest.id}>{receivedFriendRequest['first_name']} {receivedFriendRequest['last_name']}</Link></div>
-                        </Link>
-                        <Link className='friend-button' onClick={this.acceptFriendRequest} id={receivedFriendRequest['sender_id']}>
-                            Accept Friend Request
-                        </Link>
+                        </Link><br />
+                        <span className='follow-button' onClick={this.acceptFriendRequest} id={receivedFriendRequest['sender_id']}>
+                            Accept Follow Request
+                        </span>
                     </div>
                 );
             });
@@ -103,12 +104,12 @@ export default class Followers extends React.Component {
                 return (
                     <div className='friend-request-sent' key={sentFriendRequest.id}>
                         <Link to={'/athlete/' + sentFriendRequest['recipient_id']}>
-                            <img src={sentFriendRequest['image_url'] ? sentFriendRequest['image_url'] : '/public/images/profile_placeholder.jpg'} />
-                            <div><Link to={'/athlete/' + sentFriendRequest.id}>{sentFriendRequest['first_name']} {sentFriendRequest['last_name']}</Link></div>
-                        </Link>
-                        <Link className='friend-button' onClick={this.cancelFriendRequest} id={sentFriendRequest['recipient_id']}>
-                            Cancel Friend Request
-                        </Link>
+                            <img className='profile-image' src={sentFriendRequest['image_url'] ? sentFriendRequest['image_url'] : '/public/images/profile_placeholder.jpg'} />
+                            <div><Link to={'/athlete/' + sentFriendRequest['recipient_id']}>{sentFriendRequest['first_name']} {sentFriendRequest['last_name']}</Link></div>
+                        </Link><br />
+                        <span className='follow-button' onClick={this.cancelFriendRequest} id={sentFriendRequest['recipient_id']}>
+                            Cancel Follow Request
+                        </span>
                     </div>
                 );
             });
@@ -118,32 +119,31 @@ export default class Followers extends React.Component {
             // console.log(this.state.friends);
             friends = this.state.friends.map((friend) => {
                 return (
-                    <div className='friend' key={friend.id}>
+                    <div className='follower' key={friend.id}>
                         <Link to={'/athlete/' + friend.id}>
-                        <img src={friend['image_url'] ? friend['image_url'] : '/public/images/profile_placeholder.jpg'} />
+                        <img className='profile-image' src={friend['image_url'] ? friend['image_url'] : '/public/images/profile_placeholder.jpg'} />
                         <div>{friend['first_name']} {friend['last_name']}</div>
-                        </Link>
-                        <Link className='friend-button' onClick={this.unfriend} id={friend.id}>
-                            Unfriend
-                        </Link>
+                        </Link><br />
+                        <span className='follow-button' onClick={this.unfriend} id={friend.id}>
+                            Unfollow
+                        </span>
                     </div>
                 );
             });
         }
 
         return (
-                <div id='friends-wrapper'>
-                    {/* {receivedFriendRequests.length != 0 || sentFriendRequests.length != 0 || friends.length != 0 && */}
-                    {receivedFriendRequests.length != 0 && <div id='friend-requests'>
-                        Friend Requests
+                <div id='followers-wrapper'>
+                    {receivedFriendRequests.length != 0 && <div id='follow-requests'>
+                        <h2>Follow Requests</h2>
                         {receivedFriendRequests}
                     </div>}
-                    {sentFriendRequests.length != 0 && <div id='friend-requests-sent'>
-                        Friend Requests Sent
+                    {sentFriendRequests.length != 0 && <div id='follow-requests-sent'>
+                        <h2>Follow Requests Sent</h2>
                         {sentFriendRequests}
                     </div>}
-                    {friends.length != 0 && <div id='friends'>
-                        Friends
+                    {friends.length != 0 && <div id='followers'>
+                        <h2>Followers</h2>
                         {friends}
                     </div>}
                 </div>

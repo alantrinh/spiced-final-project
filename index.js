@@ -6,7 +6,7 @@ if (process.env.NODE_ENV != 'production') {
     app.use(require('./build'));
 }
 
-db.initialiseDb();
+// db.initialiseDb();
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
