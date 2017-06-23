@@ -5,8 +5,11 @@ import {Link} from 'react-router';
 export default class ActivityFeed extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            myActivitiesOnly: false
+        };
 
+        this.toggleMyActivitiesOnly = this.toggleMyActivitiesOnly.bind(this);
     }
 
     componentDidMount() {
@@ -15,7 +18,22 @@ export default class ActivityFeed extends React.Component {
         });
     }
 
-
+    toggleMyActivitiesOnly(e) {
+        this.setState(({
+            myActivitiesOnly: e.target.value
+        }), () => {
+            if (this.state.myActivitiesOnly) {
+                axios.get('/getUserActivities').then((resp) => {
+                    this.setState({activities: resp.data.data});
+                });
+            } else {
+                console.log('false');
+                axios.get('/getFollowedActivities').then((resp) => {
+                    this.setState({activities: resp.data.data});
+                });
+            }
+        });
+    }
 
     render() {
         let activities = '';
@@ -32,7 +50,7 @@ export default class ActivityFeed extends React.Component {
                             <span className='feed-date'>{(new Date(activity['start_time'])).toLocaleString()}</span><br /><br />
 
                             <Link className='feed-activity-title' to={'/activity/' + activity.id}>{activity.title ? activity.title : 'Ride'}</Link><br />
-                            <span className='feed-stats'>{Math.round(activity.distance * 100) / 100}km {Math.round(activity.elevation * 1000)}m</span>
+                            <span className='feed-stats'>{Math.round(activity.distance * 100) / 100}km &nbsp;{Math.round(activity.elevation * 1000)}m</span>
                         </div>
                         <br />
                     </div>
@@ -43,7 +61,13 @@ export default class ActivityFeed extends React.Component {
 
         return (
                 <div id='activity-feed-wrapper'>
-                    <h1>Activity Feed</h1>
+                    <div>
+                        <h1>Activity Feed</h1>
+                        <select id='feed-selector' onChange={this.toggleMyActivitiesOnly}>
+                            <option value=''>I'm Following</option>
+                            <option value='true'>My Activities</option>
+                        </select>
+                    </div>
                     {activities}
                 </div>
         );

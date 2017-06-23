@@ -194,6 +194,33 @@ function updateActivity(id, title, description) {
     });
 }
 
+function addComment(activityId, userId, comment) {
+    return new Promise((resolve, reject) => {
+        db.query(`INSERT INTO comments (activity_id, user_id, comment) VALUES ($1, $2, $3);`, [activityId, userId, comment]).then(() => {
+            resolve();
+        }).catch((err) => {
+            console.log(err);
+            reject('unable to add comment');
+        });
+    });
+}
+
+function getComments(activityId) {
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT comment, comments.created_at, athletes.id, image_url, first_name, last_name, city, state, country
+            FROM comments
+            JOIN athletes
+            ON athletes.id = comments.user_id
+            WHERE activity_id = $1
+            ORDER BY comments.created_at DESC;`, [activityId]).then((results) => {
+                resolve(results.rows);
+            }).catch((err) => {
+                console.log(err);
+                reject('unable to get comments');
+            });
+    });
+}
+
 function deleteActivity(id) {
     return new Promise((resolve, reject) => {
         db.query(`DELETE FROM activities WHERE id = $1;`, [id]).then(() => {
@@ -487,6 +514,8 @@ module.exports.updateCountry = updateCountry;
 module.exports.uploadProfileImage = uploadProfileImage;
 module.exports.deleteProfileImage = deleteProfileImage;
 module.exports.updateActivity = updateActivity;
+module.exports.addComment = addComment;
+module.exports.getComments = getComments;
 module.exports.deleteActivity = deleteActivity;
 
 module.exports.getFriendStatus = getFriendStatus;

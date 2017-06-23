@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS kudos;
 DROP TABLE IF EXISTS activities;
 DROP TABLE IF EXISTS follower_requests;
@@ -38,4 +39,12 @@ CREATE TABLE kudos (
     id SERIAL PRIMARY KEY,
     activity_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL
+);
+
+CREATE TABLE comments (
+    id SERIAL PRIMARY KEY,
+    activity_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    comment TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )

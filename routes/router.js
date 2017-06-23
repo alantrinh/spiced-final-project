@@ -330,6 +330,38 @@ router.route('/updateActivity')
         });
     });
 
+router.route('/addComment')
+
+    .post((req, res) => {
+        db.addComment(req.query.id, req.session.user.id, req.body.comment).then(() => {
+            res.json({
+                success: true
+            });
+        }).catch((err) => {
+            console.log(err);
+            res.json({
+                error: true,
+                errorMessage: err
+            });
+        });
+    });
+
+router.route('/getComments')
+
+    .get((req, res) => {
+        db.getComments(req.query.id).then((results) => {
+            res.json({
+                data: results
+            });
+        }).catch((err) => {
+            console.log(err);
+            res.json({
+                error: true,
+                errorMessage: err
+            });
+        });
+    });
+
 router.route('/deleteActivity')
 
     .post((req, res) => {

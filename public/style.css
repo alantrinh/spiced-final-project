@@ -209,6 +209,10 @@ header ul li {
     font-weight: lighter;
 }
 
+#feed-selector {
+    padding: 10px;
+}
+
 .feed-activity {
     display: flex;
     flex-direction: row;
@@ -381,14 +385,80 @@ label[for="activity-input"] {
 
 #activity-details-row-3 div {
     display: inline-block;
-    width: 33%;
+    width: 33.3333333333%;
     font-size: small;
     padding: 2.5px 0px;
 }
 
-#kudos-wrapper {
-    padding-left: 70px;
+#comment-wrapper {
+    display: inline-block;
+    width: 45%;
+    padding-left: 5%;
     padding-top: 15px;
+}
+
+#comment-wrapper h3 {
+    margin: 0px;
+    font-weight: lighter;
+}
+
+#comment-wrapper textarea {
+    width: 99%;
+    rows: 4;
+}
+
+.comment {
+    padding: 10px;
+}
+
+.comment img {
+    float: left;
+    padding-right: 10px;
+}
+
+.comment-details-wrapper {
+    display: inline-block;
+    vertical-align: top;
+    padding-left: 5px;
+    overflow: hidden;
+}
+
+.comment-details-wrapper img {
+    float: left;
+}
+
+.comment-details-wrapper a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+
+.comment-details-wrapper a:hover {
+    text-decoration: underline;
+    color: darkgrey;
+}
+
+.comment-details-wrapper p {
+    overflow: hidden;
+    margin: 0px;
+}
+
+.comment-text {
+    font-size: small;
+}
+
+.comment-details-date {
+    padding-top: 5px;
+    color: darkgrey;
+    font-size: small;
+}
+
+#kudos-wrapper {
+    display: inline-block;
+    width: 44%;
+    padding-left: 1%;
+    padding-top: 15px;
+    vertical-align: top;
 }
 
 #kudos-givers {
@@ -401,9 +471,15 @@ label[for="activity-input"] {
     padding: 5px;
 }
 
+.kudos-giver img {
+    float: left;
+    padding-right: 10px;
+}
+
 .kudos-giver a {
     color: black;
     text-decoration: none;
+    font-weight: bold;
 }
 
 .kudos-giver a:hover {

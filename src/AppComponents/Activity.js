@@ -8,7 +8,8 @@ export default class Activity extends React.Component {
         this.state = {
             id: this.props.params.id,
             showEdit: false,
-            showKudosGivers: false
+            showKudosGivers: false,
+            showCommentBox: false
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -19,6 +20,9 @@ export default class Activity extends React.Component {
         this.showKudosGivers = this.showKudosGivers.bind(this);
         this.hideKudosGivers = this.hideKudosGivers.bind(this);
         this.deleteActivity = this.deleteActivity.bind(this);
+        this.toggleCommentBox = this.toggleCommentBox.bind(this);
+        this.addComment = this.addComment.bind(this);
+        this.getComments = this.getComments.bind(this);
     }
 
     componentDidMount() {
@@ -38,6 +42,8 @@ export default class Activity extends React.Component {
         axios.get(`/getKudosCount?id=${this.state.id}`).then((resp) => {
             this.setState(resp.data);
         });
+
+        this.getComments();
     }
 
     toggleEditFields() {
@@ -45,7 +51,6 @@ export default class Activity extends React.Component {
             showEdit: !prevState.showEdit
         }));
     }
-
 
     handleChange(e) {
         this.setState({[e.target.name]: e.target.value});
@@ -104,9 +109,35 @@ export default class Activity extends React.Component {
         });
     }
 
+    toggleCommentBox() {
+        this.setState(prevState => ({
+            showCommentBox: !prevState.showCommentBox
+        }));
+    }
+
+    addComment(e) {
+        e.preventDefault();
+        const comment = this.state;
+        axios.post(`/addComment?id=${this.state.id}`, comment).then(() => {
+            this.toggleCommentBox();
+            this.getComments();
+        });
+    }
+
+    getComments() {
+        axios.get(`/getComments?id=${this.state.id}`).then((resp) => {
+            if(resp.data.data) {
+                this.setState({comments: resp.data.data});
+
+                console.log(this.state.comments);
+            }
+        });
+    }
+
     render() {
         let activity = '';
-        var kudosGivers = '';
+        let kudosGivers = '';
+        let comments = '';
 
         if (this.state.kudosGivers) {
             kudosGivers = this.state.kudosGivers.map((kudosGiver) => {
@@ -117,7 +148,21 @@ export default class Activity extends React.Component {
                         </div>
                         <div>
                             <Link to={'/athlete/' + kudosGiver.id}>{kudosGiver.first_name} {kudosGiver.last_name}</Link><br />
-                            <div>{kudosGiver.city}{kudosGiver.city && ','} {kudosGiver.state}{(kudosGiver.city || kudosGiver.state) && ','} {kudosGiver.country}</div>
+                            <div>{kudosGiver.city}{kudosGiver.city && kudosGiver.state && ', '}{kudosGiver.state}{(kudosGiver.city || kudosGiver.state) && ', '}{kudosGiver.country}</div>
+                        </div>
+                    </div>
+                );
+            });
+        }
+
+        if (this.state.comments) {
+            comments = this.state.comments.map((comment) => {
+                return (
+                    <div className='comment'>
+                        <div className='comment-details-wrapper'>
+                            <img className='feed-profile-image' src={comment['image_url'] ? comment['image_url'] : '/public/images/profile_placeholder.jpg'} />
+                            <p><Link to={'/athlete/' + comment.id}>{comment.first_name} {comment.last_name}</Link> <span className='comment-text'>{comment.comment}</span><br />
+                            <span className='comment-details-date'>{new Date(comment.created_at).toLocaleString()}</span></p>
                         </div>
                     </div>
                 );
@@ -136,6 +181,10 @@ export default class Activity extends React.Component {
                                 <span id='kudos-count' onClick={this.hideKudosGivers}>{this.state.count}</span>
                                 :
                                 <span id='kudos-count' onClick={this.showKudosGivers}>{this.state.count}</span>}
+
+                            {this.state.showCommentBox ?
+                                <button onClick={this.toggleCommentBox}>Hide Comment Box</button>
+                                : <button onClick={this.toggleCommentBox}>Add Comment</button>}
                         </span>
                     </div>
                     <div id='activity'>
@@ -146,7 +195,7 @@ export default class Activity extends React.Component {
                                     {this.state.showEdit ?
                                         (<form>
                                             <input type='text' name='title' placeholder='title' value={this.state.title} onChange={this.handleChange}></input><br />
-                                            <textarea type='text' name='description' placeholder='description' value={this.state.description} onChange={this.handleChange}></textarea>
+                                            <textarea type='text' rows='4' name='description' placeholder='description' value={this.state.description} onChange={this.handleChange}></textarea>
                                             <br />
                                             <button type='cancel' onClick={this.toggleEditFields}>Cancel</button>
                                             <button type='submit' onClick={this.updateActivity}>Save</button>
@@ -209,8 +258,8 @@ export default class Activity extends React.Component {
                                     <div>{this.state.avg_cadence}</div>
                                     <div>{this.state.max_cadence}</div>
                                     <div>Power</div>
-                                    <div>{this.state.avg_power}</div>
-                                    <div>{this.state.max_power}</div>
+                                    <div>{this.state.avg_power}W</div>
+                                    <div>{this.state.max_power}W</div>
                                     <div>Calories</div>
                                     <div>{this.state.calories}</div>
                                     <div></div>
@@ -227,6 +276,16 @@ export default class Activity extends React.Component {
         return (
             <div>
                 {activity}
+                <div id='comment-wrapper'>
+                    <h3>Comments</h3>
+                    {this.state.showCommentBox ?
+                        <form>
+                            <textarea type='text' rows='4' name='comment' placeholder='add comment' value={this.state.comment} onChange={this.handleChange}></textarea><br />
+                            <button type='submit' onClick={this.addComment}>Save</button>
+                        </form>
+                        : ''}
+                    {comments}
+                </div>
                 {this.state.showKudosGivers ? <div id='kudos-wrapper'>These athletes gave kudos: <br /><div id='kudos-givers'>{kudosGivers}</div></div> : ''}
             </div>
         );

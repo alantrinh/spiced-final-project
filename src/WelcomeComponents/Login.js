@@ -31,6 +31,10 @@ export default class Login extends React.Component {
             }
         }).catch((err) => {
             console.log(err);
+            this.setState({
+                error: true,
+                errorMessage: err
+            });
         });
     }
 
@@ -39,12 +43,12 @@ export default class Login extends React.Component {
             <div id='welcome-child'>
                 <div>
                     <h2>Log In</h2>
-                    {this.state.error && <div className="error"> {this.state.errorMessage}</div>}
                     <form  onSubmit={this.handleSubmit}>
                         <p><input type="text" name="email" placeholder="Email" value={this.state.email} onChange={this.handleChange} /></p>
                         <p><input type="password" name="password" placeholder="Password" value={this.state.password} onChange={this.handleChange} /></p>
                         <p><input type="submit" value="Submit" /></p>
                     </form>
+                    {this.state.error && <div className="error"> {this.state.errorMessage}</div>}
                 </div>
             </div>
         );
