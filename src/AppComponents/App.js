@@ -77,7 +77,7 @@ export default class App extends React.Component {
                     <ul>
                         <li><Link to='/' onClick={this.state.showProfileMenu && this.toggleProfileMenu}><h1>STRAVITA</h1></Link></li>
                         <li>
-                            {!this.state.showSearch && <img id='search-image' onClick={this.toggleSearch} src='/public/images/search.png' />}
+                            {!this.state.showSearch && <img id='search-image' onClick={this.toggleSearch} title='Show Search Bar' src='/public/images/search.png' />}
                             {this.state.showSearch && <SearchBar setSearchResults={this.setSearchResults} toggleSearch={this.toggleSearch}/>}
                         </li>
                     </ul>

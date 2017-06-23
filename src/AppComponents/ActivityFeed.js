@@ -27,7 +27,6 @@ export default class ActivityFeed extends React.Component {
                     this.setState({activities: resp.data.data});
                 });
             } else {
-                console.log('false');
                 axios.get('/getFollowedActivities').then((resp) => {
                     this.setState({activities: resp.data.data});
                 });

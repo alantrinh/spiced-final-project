@@ -174,17 +174,16 @@ export default class Activity extends React.Component {
                 <div id='activity-wrapper'>
                     <div id='activity-header'>
                         <h2>{this.state.first_name} {this.state.last_name}</h2>
-                        <span>{this.state.kudosAlreadyGiven ?
-                            <button title='Remove Kudos' onClick={this.removeKudos}>Remove Kudos</button>
-                            :
-                            <button title='Give Kudos' onClick={this.giveKudos}>Give Kudos</button>} {this.state.showKudosGivers ?
-                                <span id='kudos-count' onClick={this.hideKudosGivers}>{this.state.count}</span>
-                                :
-                                <span id='kudos-count' onClick={this.showKudosGivers}>{this.state.count}</span>}
-
-                            {this.state.showCommentBox ?
-                                <button onClick={this.toggleCommentBox}>Hide Comment Box</button>
-                                : <button onClick={this.toggleCommentBox}>Add Comment</button>}
+                        <span>
+                            <div id='kudos-button-wrapper'>{this.state.kudosAlreadyGiven ?
+                                    <span title='Remove Kudos' onClick={this.removeKudos}><img className='social-icon' src='/public/images/already_liked.png' />&nbsp;</span>
+                                    :
+                                    <span title='Give Kudos' onClick={this.giveKudos}><img className='social-icon' src='/public/images/like.png' />&nbsp;</span>} {this.state.showKudosGivers ?
+                                        <span id='kudos-count' onClick={this.hideKudosGivers}>{this.state.count}</span>
+                                        :
+                                        <span id='kudos-count' title='Show Kudos Givers' onClick={this.showKudosGivers}>{this.state.count}</span>}
+                            </div>
+                            <div id='comment-button-wrapper' title='Toggle Comment Box' onClick={this.toggleCommentBox}><img className='social-icon' src='/public/images/comment.png' /></div>
                         </span>
                     </div>
                     <div id='activity'>
