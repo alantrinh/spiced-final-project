@@ -30,6 +30,7 @@ export default class App extends React.Component {
         formData.append('file', e.target.files[0]);
 
         axios.post('/uploadActivity', formData).then((resp) => {
+            console.log(resp.data.data);
             this.toggleProfileMenu();
             browserHistory.push(`/activity/${resp.data.data.id}`);
         }).catch((err) => {

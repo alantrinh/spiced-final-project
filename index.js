@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({
 const cookieSession = require('cookie-session');
 app.use(cookieSession({
     secret: 'a really hard to guess secret',
-    maxAge: 1000 * 60 * 60 //cookie lasts an hour
+    maxAge: 1000 * 60 * 60 * 24 //cookie lasts a day
 }));
 
 const csurf = require('csurf');

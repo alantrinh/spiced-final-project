@@ -40,7 +40,7 @@ main {
 }
 
 #welcome input[type="submit"] {
-    background-color: darkorange;
+    background-color: rgb(245, 92, 6);
     color: white;
     margin: 5px;
     padding: 10px;
@@ -48,7 +48,7 @@ main {
 
 #welcome input[type="submit"]:hover {
     cursor: pointer;
-    background-color: rgb(245, 92, 6);
+    background-color: darkorange;
 }
 
 #welcome-child {
@@ -98,16 +98,16 @@ header {
     border-bottom: 1px solid lightgrey;
     padding: 5px;
     max-height: 50px;
-    color: darkorange;
+    color: rgb(245, 92, 6);
 }
 
 header > ul > li > a {
     text-decoration: none;
-    color: darkorange;
+    color: rgb(245, 92, 6);
 }
 
 header > ul >li > a:hover {
-    color: rgb(245, 92, 6);
+    color: darkorange;
 }
 
 header h1 {
@@ -641,6 +641,10 @@ label[for='profile-image-input']:hover {
 #followers-wrapper h2 {
     font-weight: lighter;
     margin: 5px;
+}
+
+.follower {
+    margin: 10px 0px;
 }
 
 .follow-button {

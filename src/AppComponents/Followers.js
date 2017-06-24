@@ -86,7 +86,7 @@ export default class Followers extends React.Component {
         if (this.state.receivedFriendRequests) {
             receivedFriendRequests = this.state.receivedFriendRequests.map((receivedFriendRequest) => {
                 return (
-                    <div className='friend-request' key={receivedFriendRequest.id}>
+                    <div className='friend-request follower' key={receivedFriendRequest.id}>
                         <Link to={'/athlete/' + receivedFriendRequest['sender_id']}>
                             <img className='profile-image' src={receivedFriendRequest['image_url'] ? receivedFriendRequest['image_url'] : '/public/images/profile_placeholder.jpg'} />
                             <div><Link to={'/athlete/' + receivedFriendRequest.id}>{receivedFriendRequest['first_name']} {receivedFriendRequest['last_name']}</Link></div>
@@ -102,7 +102,7 @@ export default class Followers extends React.Component {
         if (this.state.sentFriendRequests) {
             sentFriendRequests = this.state.sentFriendRequests.map((sentFriendRequest) => {
                 return (
-                    <div className='friend-request-sent' key={sentFriendRequest.id}>
+                    <div className='friend-request-sent follower' key={sentFriendRequest.id}>
                         <Link to={'/athlete/' + sentFriendRequest['recipient_id']}>
                             <img className='profile-image' src={sentFriendRequest['image_url'] ? sentFriendRequest['image_url'] : '/public/images/profile_placeholder.jpg'} />
                             <div><Link to={'/athlete/' + sentFriendRequest['recipient_id']}>{sentFriendRequest['first_name']} {sentFriendRequest['last_name']}</Link></div>
