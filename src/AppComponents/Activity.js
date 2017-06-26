@@ -143,13 +143,12 @@ export default class Activity extends React.Component {
             kudosGivers = this.state.kudosGivers.map((kudosGiver) => {
                 return (
                     <div className='kudos-giver'>
-                        <div>
+
                             <img className='feed-profile-image' src={kudosGiver['image_url'] ? kudosGiver['image_url'] : '/public/images/profile_placeholder.jpg'} />
-                        </div>
-                        <div>
+                            <p>
                             <Link to={'/athlete/' + kudosGiver.id}>{kudosGiver.first_name} {kudosGiver.last_name}</Link><br />
                             <div>{kudosGiver.city}{kudosGiver.city && kudosGiver.state && ', '}{kudosGiver.state}{(kudosGiver.city || kudosGiver.state) && ', '}{kudosGiver.country}</div>
-                        </div>
+                            </p>
                     </div>
                 );
             });

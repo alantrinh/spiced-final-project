@@ -67,7 +67,7 @@ main {
     padding: 50px;
     opacity: 0.8;
     filter: alpha(opacity=80);  /* For IE8 and earlier */
-    height: 33%;
+    min-height: 33%;
     width: 225px;
 }
 
@@ -227,6 +227,7 @@ header ul li {
     border-radius: 50%;
     height: 50px;
     width: 50px;
+    float: left;
 }
 
 .feed-name {
@@ -463,10 +464,6 @@ label[for="activity-input"] {
     overflow: hidden;
 }
 
-.comment-details-wrapper img {
-    float: left;
-}
-
 .comment-details-wrapper a {
     text-decoration: none;
     color: black;
@@ -504,11 +501,13 @@ label[for="activity-input"] {
 #kudos-givers {
     padding-top: 15px;
     display: flex;
+    flex-flow: row wrap;
 }
 
 .kudos-giver {
     display: inline-block;
     padding: 5px;
+    overflow: hidden;
 }
 
 .kudos-giver img {
@@ -528,8 +527,17 @@ label[for="activity-input"] {
     color: darkgrey;
 }
 
+.kudos-giver p {
+    overflow: hidden;
+    margin: 0px;
+}
+
 #search-results-wrapper {
     padding-left: 50px;
+}
+
+#search-results-wrapper h1 {
+    font-weight: lighter;
 }
 
 .search-result {

@@ -37,6 +37,7 @@ export default class Search extends React.Component {
 
         return (
             <div id='search-results-wrapper'>
+                <h1>Search Results</h1>
                 {searchResults}
             </div>
         );
