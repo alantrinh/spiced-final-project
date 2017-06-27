@@ -1,0 +1,672 @@
+main {
+    font-family: helvetica, sans-serif;
+}
+
+#welcome-wrapper {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
+#welcome {
+    background-image: url('/public/images/background.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100%;
+}
+
+#welcome a {
+    color: white;
+    text-decoration: none;
+}
+
+#welcome a:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#welcome input {
+    background-color: black;
+    color: white;
+    border: 1px solid grey;
+    padding: 10px;
+    width: 100%;
+}
+
+#welcome input:focus {
+    background-color: white;
+    color: black;
+}
+
+#welcome input[type="submit"] {
+    background-color: rgb(245, 92, 6);
+    color: white;
+    margin: 5px;
+    padding: 10px;
+}
+
+#welcome input[type="submit"]:hover {
+    cursor: pointer;
+    background-color: darkorange;
+}
+
+#welcome-child {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+    background-color: black;
+    color: white;
+    padding: 50px;
+    opacity: 0.8;
+    filter: alpha(opacity=80);  /* For IE8 and earlier */
+    min-height: 33%;
+    width: 225px;
+}
+
+#welcome-child h2 {
+    margin: 0px;
+}
+
+#welcome-option {
+    border: 1px solid lightgrey;
+    padding: 10px;
+}
+
+
+#welcome-option:hover {
+    background-color: whitesmoke;
+    cursor: pointer;
+}
+
+#welcome-option a {
+    text-decoration: none;
+    color: grey;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid lightgrey;
+    padding: 5px;
+    max-height: 50px;
+    color: rgb(245, 92, 6);
+}
+
+header > ul > li > a {
+    text-decoration: none;
+    color: rgb(245, 92, 6);
+}
+
+header > ul >li > a:hover {
+    color: darkorange;
+}
+
+header h1 {
+    margin: 0px;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+}
+
+#search-image {
+    height: 25px;
+    width: 25px;
+}
+
+#search-image:hover {
+    cursor: pointer;
+    box-shadow: 0 0 3px grey;
+    background-color: whitesmoke;
+    border-radius: 50%;
+}
+
+#search-close {
+    color: darkgrey;
+    padding-left: 5px;
+}
+
+#search-close:hover {
+    cursor: pointer;
+}
+
+header ul {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    align-items: center;
+}
+
+header ul li {
+    display: inline;
+    align-items: center;
+    padding-left: 5px;
+}
+
+#profile-menu-wrapper {
+
+}
+
+#navbar-profile-image {
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    float: right;
+}
+
+#navbar-profile-image:hover {
+    cursor: pointer;
+    box-shadow: 0 0 10px grey;
+}
+
+#profile-menu {
+    clear: right;
+    display: block;
+    color: black;
+    background-color: white;
+    border: 1px solid lightgrey;
+    border-top: none;
+    font-weight: normal;
+    text-align: right;
+    position: absolute;
+    top: 70px;
+    right: 15px;
+    padding: 5px;
+}
+
+#profile-menu li {
+    display: block;
+}
+
+#profile-menu li:hover {
+    cursor: pointer;
+    color: grey;
+    text-decoration: underline;
+}
+
+#profile-menu a {
+    text-decoration: none;
+    color: black;
+}
+
+#profile-menu a:hover {
+    color: grey;
+}
+
+#activity-feed-wrapper {
+    padding-left: 50px;
+}
+
+#activity-feed-wrapper h1 {
+    font-weight: lighter;
+}
+
+#feed-selector {
+    padding: 10px;
+}
+
+.feed-activity {
+    display: flex;
+    flex-direction: row;
+    padding: 20px 10px;
+}
+
+.feed-activity div {
+    padding: 5px;
+}
+
+.feed-profile-image {
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    float: left;
+}
+
+.feed-name {
+    font-weight: normal;
+    text-decoration: none;
+}
+
+.feed-date {
+    color: darkgrey;
+    font-size: small;
+}
+
+.feed-stats {
+    padding-left: 0px;
+    font-size: small;
+}
+
+.feed-activity div a {
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+}
+
+.feed-activity div a:hover {
+    text-decoration: underline;
+    color: blue;
+}
+
+#activity-input {
+    transform: translateX(-2000px);
+    height: 1px;
+    width: 1px;
+}
+
+label[for="activity-input"] {
+    cursor: pointer;
+}
+
+#activity-wrapper {
+    padding-left: 50px;
+    border: 1px solid lightgrey;
+}
+
+#activity-wrapper h2 {
+    font-weight: lighter;
+    margin: 0px;
+}
+
+#activity-header {
+    background-color: whitesmoke;
+    padding: 5px;
+    border-left: 1px solid lightgrey;
+    border-bottom: 1px solid lightgrey;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#kudos-button-wrapper {
+    border: 1px solid lightgrey;
+    display: inline-block;
+    padding: 5px;
+    margin: 0px 5px;
+}
+
+#kudos-button-wrapper:hover {
+    box-shadow: 0 0 10px grey;
+    cursor: pointer;
+}
+
+#kudos-count {
+    font-size: x-large;
+}
+
+#kudos-count:hover {
+    text-decoration: underline;
+    color: darkgrey;
+}
+
+#comment-button-wrapper {
+    border: 1px solid lightgrey;
+    display: inline-block;
+    padding: 5px;
+    margin: 0px 5px;
+}
+
+#comment-button-wrapper:hover {
+    box-shadow: 0 0 10px grey;
+    cursor: pointer;
+}
+
+.social-icon {
+    height: 24px;
+    width: 24px;
+}
+
+
+
+#activity {
+    display: flex;
+    justify-content: space-between;
+}
+
+#activity-panel {
+    border-left: 1px solid lightgrey;
+    padding: 20px 15px;
+    width: 45%;
+}
+
+#activity-profile-image {
+    border-radius: 50%;
+    height: 100px;
+    width: 100px;
+    float: left;
+}
+
+#activity-panel-description {
+    display: inline-block;
+    padding-left: 20px;
+    width: 65%;
+}
+
+#activity-panel-description input {
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+#activity-panel-description textarea {
+    width: 99%;
+    height: 50%;
+}
+
+#activity-panel-date {
+    color: darkgrey;
+    font-size: small;
+}
+
+#activity-panel-description-text {
+    color: darkgrey;
+    font-size: small;
+    word-wrap: break-word;
+    padding-bottom: 10px;
+}
+
+#activity-panel-description-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+#kudos-count:hover {
+    cursor: pointer
+}
+
+#activity-details-wrapper {
+    width: 50%;
+    border-left: 1px solid lightgrey;
+    padding: 20px 15px;
+}
+
+#activity-details-wrapper h3 {
+    margin: 0px;
+    font-weight: lighter;
+}
+
+.activity-details {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    padding-bottom: 10px;
+}
+
+.activity-details div {
+    width: 33%;
+}
+
+.activity-details-subtext {
+    color: darkgrey;
+    font-size: small;
+}
+
+#activity-details-row-2 {
+    background-color: whitesmoke;
+    padding: 5px 0px;;
+    border-top: 1px solid lightgrey;
+    border-bottom: 1px solid lightgrey;
+}
+
+#activity-details-row-3 {
+    padding-top: 5px;
+    width: 100%;
+}
+
+.activity-details-row-3-heading {
+    font-weight: bold;
+}
+
+#activity-details-row-3 div {
+    display: inline-block;
+    width: 33.3333333333%;
+    font-size: small;
+    padding: 2.5px 0px;
+}
+
+#comment-wrapper {
+    display: inline-block;
+    width: 45%;
+    padding-left: 5%;
+    padding-top: 15px;
+}
+
+#comment-wrapper h3 {
+    margin: 0px;
+    font-weight: lighter;
+}
+
+#comment-wrapper textarea {
+    width: 99%;
+    rows: 4;
+}
+
+.comment {
+    padding: 10px;
+}
+
+.comment img {
+    float: left;
+    padding-right: 10px;
+}
+
+.comment-details-wrapper {
+    display: inline-block;
+    vertical-align: top;
+    padding-left: 5px;
+    overflow: hidden;
+}
+
+.comment-details-wrapper a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+
+.comment-details-wrapper a:hover {
+    text-decoration: underline;
+    color: darkgrey;
+}
+
+.comment-details-wrapper p {
+    overflow: hidden;
+    margin: 0px;
+}
+
+.comment-text {
+    font-size: small;
+}
+
+.comment-details-date {
+    padding-top: 5px;
+    color: darkgrey;
+    font-size: small;
+}
+
+#kudos-wrapper {
+    display: inline-block;
+    width: 44%;
+    padding-left: 1%;
+    padding-top: 15px;
+    vertical-align: top;
+}
+
+#kudos-givers {
+    padding-top: 15px;
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.kudos-giver {
+    display: inline-block;
+    padding: 5px;
+    overflow: hidden;
+}
+
+.kudos-giver img {
+    float: left;
+    padding-right: 10px;
+}
+
+.kudos-giver a {
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.kudos-giver a:hover {
+    text-decoration: underline;
+    cursor: pointer;
+    color: darkgrey;
+}
+
+.kudos-giver p {
+    overflow: hidden;
+    margin: 0px;
+}
+
+#search-results-wrapper {
+    padding-left: 50px;
+}
+
+#search-results-wrapper h1 {
+    font-weight: lighter;
+}
+
+.search-result {
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+}
+
+.search-result img {
+    border-radius: 50%;
+    height: 75px;
+    width: 75px;
+}
+
+.search-result img:hover {
+    box-shadow: 0 0 10px grey;
+}
+
+.search-result-text {
+    padding: 5px;
+}
+
+.search-result a {
+    color: black;
+    text-decoration: none;
+}
+
+.search-result a:hover {
+    text-decoration: underline;
+    color: darkgrey;
+    cursor: pointer;
+}
+
+#profile-wrapper {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+}
+
+#profile-image-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile-image {
+    border-radius: 50%;
+    height: 150px;
+    width: 150px;
+    margin-right: 10px;
+}
+
+label[for='profile-image-input']:hover {
+    cursor: pointer;
+    color: grey;
+    text-decoration: underline;
+}
+
+#profile-image-delete:hover {
+    cursor: pointer;
+    color: grey;
+    text-decoration: underline;
+}
+
+#profile-image-input {
+    transform: translateX(-2000px);
+    height: 1px;
+    width: 1px;
+}
+
+.location-profile {
+    color: darkgrey;
+    font-size: small;
+}
+
+.profile h2 {
+    margin: 0px;
+    font-weight: lighter;
+}
+
+#profile-activity-count {
+    text-align: center;
+}
+
+#profile-activity-count h2 {
+    font-size: 42pt;
+    margin-bottom: 5px;
+}
+
+#profile-total-activities {
+    color: darkgrey;
+    font-size: small;
+}
+
+#followers-wrapper {
+    text-align: center;
+}
+
+#followers-wrapper a {
+    text-decoration: none;
+    color: black;
+}
+
+#followers-wrapper a:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#followers-wrapper h2 {
+    font-weight: lighter;
+    margin: 5px;
+}
+
+.follower {
+    margin: 10px 0px;
+}
+
+.follow-button {
+    border: 1px solid darkgrey;
+    padding: 5px;
+    width: 100%;
+}
+
+.follow-button:hover {
+    color: white;
+    background-color: rgb(245, 92, 6);
+    cursor: pointer;
+}
+
+.error {
+    color: red;
+}
