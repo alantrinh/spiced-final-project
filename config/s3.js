@@ -4,8 +4,8 @@ const knox = require('knox');
 
 let secrets;
 if (process.env.NODE_ENV == 'production') {
-    // secrets = process.env; // in prod the secrets are environment variables
-    secrets = require('../secrets'); // secrets.json is in .gitignore
+    secrets = process.env; // in prod the secrets are environment variables
+    // secrets = require('../secrets'); // secrets.json is in .gitignore
 } else {
     secrets = require('../secrets'); // secrets.json is in .gitignore
 }
