@@ -48,6 +48,6 @@ if (require.main == module) {
         watchOptions: {
             aggregateTimeout: 300
         },
-        publicPath: '/'
+        publicPath: '/public/'
     });
 }
