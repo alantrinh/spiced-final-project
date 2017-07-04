@@ -3,6 +3,7 @@ const express = require('express'),
 const db = require('./../config/db.js');
 const EasyFit = require('easy-fit').default;
 const fs = require('fs');
+const s3 = require('../config/s3');
 
 const multer = require('multer');
 var diskStorage = multer.diskStorage({
@@ -263,7 +264,7 @@ router.route('/updateLocation')
 
 router.route('/uploadProfileImage')
 
-    .post(uploader.single('file'), (req, res) => {
+    .post(uploader.single('file'), s3.toS3, (req, res) => {
         if (req.file) {
             db.uploadProfileImage(req.file.filename, req.session.user.id).then((result) => {
                 req.session.user['image_url'] != null && fs.unlink(__dirname + '/..' + req.session.user['image_url'], (err) => {

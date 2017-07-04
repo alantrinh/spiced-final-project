@@ -3,3 +3,4 @@ node_modules
 bundle.js
 postgres_login.json
 uploads
+secrets.json
