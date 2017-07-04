@@ -314,7 +314,7 @@ function updateCountry(country, id) {
 
 function uploadProfileImage(imageUrl, id) {
     return new Promise((resolve, reject) => {
-        db.query(`UPDATE athletes SET image_url = $1 WHERE id = $2 RETURNING image_url;`, ['https://s3.amazonaws.com/stravita/' + imageUrl, id]).then((results) => {
+        db.query(`UPDATE athletes SET image_url = $1 WHERE id = $2 RETURNING image_url;`, ['https://s3.amazonaws.com/stravita/uploads/' + imageUrl, id]).then((results) => {
             if (results.rows[0] == undefined) {
                 reject('id does not exist, please try again');
             } else {

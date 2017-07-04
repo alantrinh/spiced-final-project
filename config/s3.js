@@ -1,7 +1,6 @@
 const fs = require('fs');
 const knox = require('knox');
 
-
 let secrets;
 if (process.env.NODE_ENV == 'production') {
     secrets = process.env; // in prod the secrets are environment variables
@@ -14,8 +13,6 @@ const client = knox.createClient({
     secret: secrets.AWS_SECRET,
     bucket: 'stravita'
 });
-
-
 
 function toS3(req, res, next){
     const s3Request = client.put(req.file.filename, {
@@ -39,6 +36,5 @@ function toS3(req, res, next){
         }
     });
 }
-
 
 module.exports.toS3 = toS3;
