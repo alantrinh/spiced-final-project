@@ -1,6 +1,6 @@
 const fs = require('fs');
 const initialiseDbSql = fs.readFileSync(__dirname + "/initialise_db.sql").toString();
-const postgresLogin = require('./postgres_login.json');
+// const postgresLogin = require('./postgres_login.json');
 const spicedPg = require('spiced-pg');
 const db = spicedPg(process.env.DATABASE_URL || `postgres:${postgresLogin.user}:${postgresLogin.pw}@localhost:5432/stravita`);
 const bcrypt = require('bcryptjs');
