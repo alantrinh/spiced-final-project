@@ -264,7 +264,7 @@ router.route('/updateLocation')
 
 router.route('/uploadProfileImage')
 
-    .post(uploader.single('file'), s3.toS3, (req, res) => {
+    .post(uploader.single('file'), process.env.NODE_ENV == 'production' ? s3.toS3 : (req, res, next) => next(), (req, res) => {
         if (req.file) {
             db.uploadProfileImage(req.file.filename, req.session.user.id).then((result) => {
                 req.session.user['image_url'] != null && fs.unlink(__dirname + '/..' + req.session.user['image_url'], (err) => {
